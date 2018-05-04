@@ -10,8 +10,11 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js',
     chunkFilename: '[name].js',
+    // libraryTarget: 'var',
     publicPath: '/dist/'
   },
+  mode: process.env.MODE ? process.env.MODE : 'production',
+  target: 'web', // web || node, default node
   module: {
     rules: [
       {
@@ -22,8 +25,9 @@ module.exports = {
           options: {
             babelrc: false,
             presets: [
-              ['es2015', { modules: false }],
-              // 'react',
+              "es2015",
+              "stage-1",
+              ["env",  { "modules": false }]
             ],
             plugins: [
               'transform-object-rest-spread',
@@ -45,17 +49,17 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './demo/index.html',
-      inject:'body', // true|body|head|false，default true
-    })
+      // inject:'body', // true|body|head|false，default true
+    }),
+    new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
     port: 8080,
     open: true,
-    // contentBase: path.join(__dirname, "./dist"),
-    // index: 'index.html',
-    // inline: true,
-    // hot: true,
+    contentBase: path.join(__dirname, "./dist"),
+    index: 'index.html',
+    inline: true,
+    hot: true,
     compress: false
-  },
-  target: 'web' // web || node, default node
+  }
 };

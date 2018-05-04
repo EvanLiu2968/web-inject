@@ -227,6 +227,10 @@ injectBuilder.prototype = {
       }
     }
     return this
+  },
+
+  preload: function(options){
+    //
   }
 }
 

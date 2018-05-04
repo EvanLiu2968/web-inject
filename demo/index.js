@@ -1,5 +1,5 @@
-// const injector = require('chain-injector')
-import injector from 'chain-injector'
+const injector = require('chain-injector')
+
 injector
 .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
   alert('jQuery is injected!')

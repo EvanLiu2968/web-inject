@@ -23,6 +23,7 @@
   "scripts": {
     "build": "babel src -d lib",
     "demo": "webpack-dev-server",
+    "build:dist": "webpack",
     "lint": "eslint .",
     "fix": "eslint --fix .",
     "ii": "npm install --registry https://registry.npm.taobao.org",

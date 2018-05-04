@@ -1,4 +1,4 @@
-const injectBuilder = reuqire('./injector')
+const injectBuilder = require('./injector')
 
 //singleton models
 var injectInstance = null; 

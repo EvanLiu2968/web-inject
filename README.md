@@ -59,7 +59,7 @@ injector
 const injector = require('chain-injector')
 injector
 .preload({
-  images: [
+  image: [
     'https://www.evanliu2968.com.cn/public/images/horse.png'
   ],
   audio: [
