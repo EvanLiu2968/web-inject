@@ -60,7 +60,8 @@ const injector = require('chain-injector')
 injector
 .preload({
   image: [
-    'https://www.evanliu2968.com.cn/public/images/horse.png'
+    'https://www.evanliu2968.com.cn/public/images/horse.png',
+    'https://www.evanliu2968.com.cn/public/images/eagle.png'
   ],
   audio: [
     'demo.mp4'
@@ -69,10 +70,10 @@ injector
     'demo.mp3'
   ],
   onLoading: function(progress){
-    //
+    // progress is float number between 0 and 100
   },
   onComplete: function(){
-    // 
+    // a callback when all resourses are preloaded
   }
 })
 ```
