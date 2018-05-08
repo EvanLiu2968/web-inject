@@ -1,5 +1,5 @@
 {
-  "name": "chain-injector",
+  "name": "chain-loader",
   "version": "1.0.0",
   "description": "Inject js and css into document, or preload images/audios/videos resourcs.",
   "main": "lib/index.js",
@@ -7,23 +7,23 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EvanLiu2968/chain-injector.git"
+    "url": "https://github.com/EvanLiu2968/chain-loader.git"
   },
   "keywords": [
     "inject",
     "inject-js",
     "inject-css",
-    "injector",
+    "loader",
     "preload-images",
     "chain"
   ],
   "bugs": {
-    "url": "https://github.com/EvanLiu2968/chain-injector/issues"
+    "url": "https://github.com/EvanLiu2968/chain-loader/issues"
   },
   "scripts": {
     "build": "babel src -d lib",
-    "demo": "webpack-dev-server",
-    "build:dist": "webpack",
+    "build:dist": "MODE=production webpack",
+    "test": "webpack-dev-server",
     "lint": "eslint .",
     "fix": "eslint --fix .",
     "ii": "npm install --registry https://registry.npm.taobao.org",

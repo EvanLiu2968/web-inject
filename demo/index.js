@@ -1,19 +1,27 @@
-const injector = require('chain-injector')
+const loader = require('chain-loader')
 
-injector
+loader
+.css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css')
 .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
-  console.log('jQuery is injected!')
-  $content = $(`
-  <div></div>
+  var $content = $(`
+<div class="container">
+  <h1>chain-loader</h1>
+  <div class="alert alert-success" role="alert">jQuery and Bootstrap is injected!</div>
+  <div style="margin-bottom:1em">
+    <button class="btn btn-primary preload-images">Preload Images</button>
+  </div>
+  <div id="progress"></div>
+  
+</div>
   `)
   $('#app')
   .append($content)
   .on('click','.preload-images',function(){
-    injector
+    loader
     .preload({
       image: [
-        'https://www.evanliu2968.com.cn/public/images/horse.png',
-        'https://www.evanliu2968.com.cn/public/images/eagle.png'
+        '/public/images/horse.png',
+        '/public/images/eagle.png'
       ],
       // audio: [
       //   'demo.mp4'
@@ -21,16 +29,23 @@ injector
       // video: [
       //   'demo.mp3'
       // ],
+      urlMap: function(url, type){
+        if(type == 'image'){
+          return 'https://www.evanliu2968.com.cn' + url
+        }
+      },
       onLoading: function(progress){
-        console.log(progress)
-        // progress is float number between 0 and 100
+        $("#progress").html(`
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100" style="width: ${progress}%;">
+            <span class="sr-only">${progress}% Complete</span>
+          </div>
+        </div>
+        `)
       },
       onComplete: function(){
-        // a callback when all resourses are preloaded
+        alert('preload completed!')
       }
     })
   })
-})
-.css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',function(){
-  console.log('Bootstrap is injected!')
 })

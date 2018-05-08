@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    index: './demo/index',
+    index: process.env.MODE == 'production' ? './src/index' : './demo/index',
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -39,10 +39,10 @@ module.exports = {
       },
     ],
   },
-  devtool: 'inline-source-map',
+  devtool: process.env.MODE == 'production' ? 'source-map' : 'inline-source-map',
   resolve: {
     alias: {
-      'chain-injector': path.resolve(__dirname, 'src'),
+      'chain-loader': path.resolve(__dirname, 'src'),
     },
   },
   plugins: [
@@ -54,7 +54,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
-    port: 8080,
+    port: 9080,
     open: true,
     contentBase: path.join(__dirname, "./dist"),
     index: 'index.html',
