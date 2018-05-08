@@ -42,7 +42,7 @@ module.exports = {
   devtool: process.env.MODE == 'production' ? 'source-map' : 'inline-source-map',
   resolve: {
     alias: {
-      'chain-loader': path.resolve(__dirname, 'src'),
+      'web-inject': path.resolve(__dirname, 'src'),
     },
   },
   plugins: [

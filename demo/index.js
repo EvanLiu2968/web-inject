@@ -1,11 +1,11 @@
-const loader = require('chain-loader')
+const injector = require('web-inject')
 
-loader
+injector
 .css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css')
 .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
   var $content = $(`
 <div class="container">
-  <h1>chain-loader</h1>
+  <h1>web-inject</h1>
   <div class="alert alert-success" role="alert">jQuery and Bootstrap is injected!</div>
   <div style="margin-bottom:1em">
     <button class="btn btn-primary preload-images">Preload Images</button>
@@ -17,7 +17,7 @@ loader
   $('#app')
   .append($content)
   .on('click','.preload-images',function(){
-    loader
+    injector
     .preload({
       image: [
         '/public/images/horse.png',

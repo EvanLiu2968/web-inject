@@ -1,11 +1,12 @@
 /*
- * https://github.com/EvanLiu2968/chain-loader
+ * https://github.com/EvanLiu2968/web-inject
  * inject css/js, for client and server, also support inject css/js array or code
  */
 const isClient = typeof window != 'undefined'
 
 class Loader {
-  constructor(){
+  constructor(options){
+    this.options = options
     this.JSLoader = require('./JSLoader');
     this.CSSLoader = require('./CSSLoader');
     this.ImageLoader = require('./ImageLoader');
@@ -18,6 +19,10 @@ class Loader {
 
   removeQueue(){
     this.LoadQueue = {}
+  }
+
+  create(options){
+    return new Loader(options)
   }
 
   js(src, cb){
@@ -81,4 +86,7 @@ class Loader {
   }
 }
 
-module.exports = new Loader()
+module.exports = new Loader({
+  urlMap: function(url, type){ return url },
+  maxConnection: 4
+})

@@ -1,4 +1,4 @@
-# loader
+# injector
 
 Inject js and css into document, or preload images/audios/videos resourcs.
 
@@ -8,13 +8,13 @@ and you can call it for chaining.
 
 ### Install
 ```bash
-npm install chain-loader --save
+npm install web-inject --save
 ```
 
 ### inject js or css tag
 ```javascript
-const loader = require('chain-loader')
-loader
+const injector = require('web-inject')
+injector
 .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
   alert('jQuery is injected!')
 })
@@ -25,9 +25,9 @@ loader
 
 ### inject js or css into document
 ```javascript
-const loader = require('chain-loader')
+const injector = require('web-inject')
 const onComplete = function(){ alert('inject is completed!')}
-loader
+injector
 .js(`
 [].forEach.call(document.querySelectorAll("*"), function(a) {
   a.style.outline = "1px solid #" + (~~(Math.random() * (1 << 24))).toString(16)
@@ -42,8 +42,8 @@ body{
 
 ### inject js or css list
 ```javascript
-const loader = require('chain-loader')
-loader
+const injector = require('web-inject')
+injector
 .js([
   'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',
   'https://cdn.bootcss.com/lodash.js/4.17.5/lodash.min.js'
@@ -56,8 +56,8 @@ loader
 
 ### preload images or audios or videos 
 ```javascript
-const loader = require('chain-loader')
-loader
+const injector = require('web-inject')
+injector
 .preload({
   image: [
     'https://www.evanliu2968.com.cn/public/images/horse.png',
@@ -74,8 +74,11 @@ loader
       return 'https://www.evanliu2968.com.cn' + url
     }
   },
-  onLoading: function(progress){
+  onProgress: function(progress){
     // progress is float number between 0 and 100
+  },
+  onError: function(error){
+    // error occured
   },
   onComplete: function(){
     // a callback when all resourses are preloaded
@@ -83,13 +86,13 @@ loader
 })
 ```
 
-### create a new loader
+### create a new injector
 ```javascript
 /*
- * the loader is new instance by create
+ * the injector is new instance by create
  * then, It's the same usage as above.
  */
-const loader = require('chain-loader').create({
+const injector = require('web-inject').create({
   urlMap: function(url, type){
     if(type == 'css' && (! /^(http|\/)/.test(url))){
       // innerCSS opacity mixins for IE
@@ -103,12 +106,7 @@ const loader = require('chain-loader').create({
     }
     return url
   },
-  onLoading: function(progress){
-    console.log(progress)
-  },
-  onComplete: function(){
-    alert('completed!')
-  }
+  maxConnection: 4 // max Simultaneous Browser Connections
 })
 ```
 
