@@ -1,7 +1,11 @@
 # webInject
 
-Inject js and css into document, or preload images/audios/videos resourcs.
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/EvanLiu2968/web-inject)[![npm](https://img.shields.io/npm/v/web-inject.svg)](https://www.npmjs.com/package/web-inject)[![continuousphp](https://img.shields.io/continuousphp/git-hub/doctrine/dbal/master.svg)](https://www.npmjs.com/package/web-inject)[![Github file size](https://img.shields.io/github/size/Evanliu2968/web-inject/dist/webInject.min.js.svg)](https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/dist/webInject.min.js)
 
+
+
+
+Inject js and css into document, or preload images/audios/videos resourcs.
 and you can call it for chaining.
 
 ## Usage
