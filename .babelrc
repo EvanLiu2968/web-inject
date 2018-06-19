@@ -1,13 +1,9 @@
 {
   "presets": [
     "es2015",
-    "stage-1",
+    "stage-0",
     ["env",  { "modules": false }]
   ],
-  "plugins": [
-    "transform-object-assign",
-    "transform-object-rest-spread",
-    "transform-class-properties"
-  ],
+  "plugins": [],
   "comments": false
 }

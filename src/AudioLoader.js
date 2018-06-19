@@ -12,6 +12,10 @@ class AudioLoader extends Loader {
     tag.preload = "none";
     tag.src = src;
   }
+
+  load(src, cb){
+    this.createRemoteAudio(src, cb)
+  }
 }
 
 module.exports = new AudioLoader()

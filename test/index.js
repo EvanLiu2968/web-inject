@@ -2,18 +2,27 @@ const injector = require('web-inject')
 
 injector
 .css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css')
+.css(
+`
+  h1 {
+    margin: 20px 0
+  }
+`
+)
 .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
-  var $content = $(`
-<div class="container">
-  <h1>web-inject</h1>
-  <div class="alert alert-success" role="alert">jQuery and Bootstrap is injected!</div>
-  <div style="margin-bottom:1em">
-    <button class="btn btn-primary preload-images">Preload Images</button>
+  var $content = $(
+`
+  <div class="container">
+    <h1>web-inject</h1>
+    <div class="alert alert-success" role="alert">jQuery and Bootstrap is injected success!</div>
+    <div style="margin-bottom:1em">
+      <button class="btn btn-primary preload-images">Preload Images</button>
+    </div>
+    <div id="progress"></div>
+    <div id="preload"></div>
   </div>
-  <div id="progress"></div>
-  
-</div>
-  `)
+`
+)
   $('#app')
   .append($content)
   .on('click','.preload-images',function(){
@@ -45,6 +54,12 @@ injector
       },
       onComplete: function(){
         alert('preload completed!')
+        $("#preload").html(
+          `
+          <img src="https://www.evanliu2968.com.cn/public/images/horse.png" />
+          <img src="https://www.evanliu2968.com.cn/public/images/eagle.png" />
+          `
+        )
       }
     })
   })

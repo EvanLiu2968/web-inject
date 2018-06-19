@@ -1,4 +1,4 @@
-# injector
+# webInject
 
 Inject js and css into document, or preload images/audios/videos resourcs.
 
@@ -6,58 +6,85 @@ and you can call it for chaining.
 
 ## Usage
 
-### Install
+for ES5, you can ...
+```html
+<script type="text/javascript" src="https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/dist/webInject.min.js"></script>
+<script>
+  window.webInject
+  .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
+    alert('jQuery is injected!')
+  })
+  .css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',function(){
+    alert('Bootstrap is injected!')
+  })
+</script>
+```
+
+for ES6+, you can ...
 ```bash
+# install it from npm
 npm install web-inject --save
 ```
-
-### inject js or css tag
 ```javascript
-const injector = require('web-inject')
-injector
-.js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
-  alert('jQuery is injected!')
-})
-.css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',function(){
-  alert('Bootstrap is injected!')
-})
+import webInject from 'web-inject'
+// or
+const webInject = require('web-inject')
 ```
 
-### inject js or css into document
+
+### Inject js or css tag
+
 ```javascript
-const injector = require('web-inject')
+const webInject = require('web-inject')
+webInject
+  .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
+    alert('jQuery is injected!')
+  })
+  .css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',function(){
+    alert('Bootstrap is injected!')
+  })
+```
+
+### Inject js or css into document
+
+```javascript
+const webInject = require('web-inject')
 const onComplete = function(){ alert('inject is completed!')}
-injector
-.js(`
-[].forEach.call(document.querySelectorAll("*"), function(a) {
-  a.style.outline = "1px solid #" + (~~(Math.random() * (1 << 24))).toString(16)
-});
+webInject
+  .js(
+`
+  [].forEach.call(document.querySelectorAll("*"), function(a) {
+    a.style.outline = "1px solid #" + (~~(Math.random() * (1 << 24))).toString(16)
+  });
 `)
-.css(`
-body{
-  background: #20a0ff;
-}
+  .css(
+`
+  body{
+    background: #20a0ff;
+  }
 `)
 ```
 
-### inject js or css list
+### Inject js or css list
+
 ```javascript
-const injector = require('web-inject')
-injector
-.js([
-  'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',
-  'https://cdn.bootcss.com/lodash.js/4.17.5/lodash.min.js'
-])
-.css([
-  'https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',
-  'https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css'
-])
+const webInject = require('web-inject')
+webInject
+  .js([
+    'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',
+    'https://cdn.bootcss.com/lodash.js/4.17.5/lodash.min.js'
+  ])
+  .css([
+    'https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',
+    'https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css'
+  ])
 ```
 
-### preload images or audios or videos 
+### Preload images or audios or videos
+
 ```javascript
-const injector = require('web-inject')
-injector
+const webInject = require('web-inject')
+webInject
 .preload({
   image: [
     'https://www.evanliu2968.com.cn/public/images/horse.png',
@@ -86,13 +113,14 @@ injector
 })
 ```
 
-### create a new injector
+### Create a new webInject
+
 ```javascript
 /*
- * the injector is new instance by create
+ * the webInject is new instance by create
  * then, It's the same usage as above.
  */
-const injector = require('web-inject').create({
+const webInject = require('web-inject').create({
   urlMap: function(url, type){
     if(type == 'css' && (! /^(http|\/)/.test(url))){
       // innerCSS opacity mixins for IE

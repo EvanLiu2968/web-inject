@@ -25,21 +25,21 @@ class Loader {
     return new Loader(options)
   }
 
-  js(src, cb){
+  load(loader, src, cb){
     if(!isClient) return;
 
     if (typeof src == 'string') {
-      this.JSLoader.load(src, cb)
+      loader.load(src, cb)
     }
 
     if (src && Array.isArray(src)) {
       if (src.length) {
         if (src.length == 1) {
-          this.JSLoader.load(src[0], cb)
+          loader.load(src[0], cb)
         } else {
-          this.JSLoader.load(src[0], ()=>{
+          loader.load(src[0], ()=>{
             src.shift()
-            this.js(src, cb)
+            loader.load(src, cb)
           })
         }
       }
@@ -47,26 +47,24 @@ class Loader {
     return this
   }
 
+  js(src, cb){
+    return this.load(this.JSLoader, src, cb)
+  }
+
   css(src, cb){
-    if(!isClient) return;
+    return this.load(this.CSSLoader, src, cb)
+  }
 
-    if (typeof src == 'string') {
-      this.CSSLoader.load(src, cb)
-    }
+  image(src, cb){
+    return this.load(this.ImageLoader, src, cb)
+  }
 
-    if (src && Array.isArray(src)) {
-      if (src.length) {
-        if (src.length == 1) {
-          this.CSSLoader.load(src[0], cb)
-        } else {
-          this.CSSLoader.load(src[0], ()=>{
-            src.shift()
-            this.css(src, cb)
-          })
-        }
-      }
-    }
-    return this
+  audio(src, cb){
+    return this.load(this.AudioLoader, src, cb)
+  }
+
+  video(src, cb){
+    return this.load(this.VideoLoader, src, cb)
   }
 
   preload(options){
@@ -82,7 +80,24 @@ class Loader {
       onComplete: function(){
         //
       }
-    },options)
+    }, options)
+
+    let loadType = ['js', 'css', 'image', 'audio', 'video'];
+    loadType.forEach((item, i)=>{
+
+      if(!options[item]) return;
+
+      let url = options[item]
+      if(Array.isArray(url)){
+        url = options[item].map(u=>{
+          return options.urlMap(u, item)
+        })
+      }else{
+        url = options.urlMap(url, item)
+      }
+
+      this[item](url, options.onComplete)
+    })
   }
 }
 
