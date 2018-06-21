@@ -4,6 +4,14 @@
     "stage-0",
     ["env",  { "modules": false }]
   ],
-  "plugins": [],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "polyfill": true,
+        "regenerator": true
+      }
+    ]
+  ],
   "comments": false
 }
