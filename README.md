@@ -2,12 +2,12 @@
 
 [![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/EvanLiu2968/web-inject)[![npm](https://img.shields.io/npm/v/web-inject.svg)](https://www.npmjs.com/package/web-inject)[![continuousphp](https://img.shields.io/continuousphp/git-hub/doctrine/dbal/master.svg)](https://www.npmjs.com/package/web-inject)[![Github file size](https://img.shields.io/github/size/Evanliu2968/web-inject/dist/webInject.min.js.svg)](https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/dist/webInject.min.js)
 
-Inject js and css into document, or preload images/audios/videos resourcs.
-and you can call it for chaining.
+Inject js and css into document, or preload images, audios or videos resources.
+and you can call it with chaining.
 
 ## Usage
 
-for ES5, you can ...
+in ES5, you can ...
 ```html
 <script type="text/javascript" src="https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/dist/webInject.min.js"></script>
 <script>
@@ -21,7 +21,7 @@ for ES5, you can ...
 </script>
 ```
 
-for ES6+, you can ...
+in ES6+, you can ...
 ```bash
 # install it from npm
 npm install web-inject --save
@@ -81,7 +81,7 @@ webInject
   ])
 ```
 
-### Preload images or audios or videos
+### Preload images, audios or videos
 
 ```javascript
 const webInject = require('web-inject')
@@ -92,14 +92,16 @@ webInject
     'https://www.evanliu2968.com.cn/public/images/eagle.png'
   ],
   audio: [
-    'demo.mp4'
+    '/static/images/music/%E5%AE%8B%E5%86%AC%E9%87%8E%20-%20%E8%8E%89%E8%8E%89%E5%AE%89.mp3'
   ],
   video: [
-    'demo.mp3'
+    'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
   ],
   urlMap: function(url, type){
-    if(type == 'audio' || type == 'video'){
-      return 'https://www.evanliu2968.com.cn' + url
+    if(type == 'audio'){
+      return 'https://evanliu2968.github.io' + url
+    } else {
+      return url
     }
   },
   onProgress: function(progress){
@@ -135,7 +137,7 @@ const webInject = require('web-inject').create({
     }
     return url
   },
-  maxConnection: 4 // max Simultaneous Browser Connections
+  maxConnection: 4 // max Simultaneous Browser Connections at the same.
 })
 ```
 
