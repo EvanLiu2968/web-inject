@@ -12,13 +12,39 @@ class Loader {
     this.ImageLoader = require('./ImageLoader');
     this.AudioLoader = require('./AudioLoader');
     this.VideoLoader = require('./VideoLoader');
-    this.LoadQueue = {
-      js: []
-    };
+    this.loadQueue = [];
+    this.taskQueue = [
+      // {
+      //   url: 'demo.js',
+      //   type: 'js',
+      //   callback: null,
+      //   state: null,
+      // }
+    ];
   }
 
   removeQueue(){
     this.LoadQueue = {}
+  }
+
+  startQueue(){
+    let queue = this.loadQueue;
+    for(let i =0; i<queue.length; i++){
+      if(!queue[i].state){
+        this.load(queue[i].type, queue[i].url, ()=>{
+          if(queue[i].callback) queue[i].callback()
+        })
+      }
+    }
+  }
+
+  createQueue(){
+    let queue = this.taskQueue;
+    for(let i =0; i<queue.length; i++){
+      if(this.loadQueue.length < this.options.maxConnection){
+        this.loadQueue.push(queue[i])
+      }
+    }
   }
 
   create(options){
