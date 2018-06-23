@@ -48,7 +48,7 @@ class JSLoader extends Loader {
         if (src.indexOf('http')==0 || src.indexOf('/')==0) {
           this.createRemoteJS($id, src, cb)
         } else {
-          this.reateInnerJS($id, src, cb)
+          this.createInnerJS($id, src, cb)
         }
       }
     } else {

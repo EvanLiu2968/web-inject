@@ -9,8 +9,9 @@ class VideoLoader extends Loader {
     var tag = document.createElement('video');
     tag.autoplay = false;
     //LM: Firefox fails when this the preload="none" for other tags, but it needs to be "none" to ensure PreloadJS works.
-    tag.preload = "none";
+    // tag.preload = "none";
     tag.src = src;
+    this.subscribeMedia(tag, cb)
   }
 
   load(src, cb){

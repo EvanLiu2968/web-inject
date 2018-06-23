@@ -46,6 +46,20 @@ module.exports = class Loader {
     }
   }
 
+  subscribeMedia(el, cb) {
+    if (el.complete) {
+      cb();
+    } else {
+      el.onload = function() {
+        cb();
+      };
+
+      el.onerror = function(e) {
+        cb();
+      };
+    }
+  }
+
   isImageTag(item) {
     return item instanceof HTMLImageElement;
   }

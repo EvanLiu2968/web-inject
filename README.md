@@ -2,7 +2,7 @@
 
 [![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/EvanLiu2968/web-inject)[![npm](https://img.shields.io/npm/v/web-inject.svg)](https://www.npmjs.com/package/web-inject)[![continuousphp](https://img.shields.io/continuousphp/git-hub/doctrine/dbal/master.svg)](https://www.npmjs.com/package/web-inject)[![Github file size](https://img.shields.io/github/size/Evanliu2968/web-inject/dist/webInject.min.js.svg)](https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/dist/webInject.min.js)
 
-Inject js and css into document, or preload images, audios or videos resources.
+Inject js and css into document, or preload images.
 and you can call it with chaining.
 
 ## Usage
@@ -12,10 +12,10 @@ in ES5, you can ...
 <script type="text/javascript" src="https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/dist/webInject.min.js"></script>
 <script>
   window.webInject
-  .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
+  .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js', function(){
     alert('jQuery is injected!')
   })
-  .css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',function(){
+  .css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css', function(){
     alert('Bootstrap is injected!')
   })
 </script>
@@ -38,10 +38,10 @@ const webInject = require('web-inject')
 ```javascript
 const webInject = require('web-inject')
 webInject
-  .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',function(){
+  .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js', function(){
     alert('jQuery is injected!')
   })
-  .css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',function(){
+  .css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css', function(){
     alert('Bootstrap is injected!')
   })
 ```
@@ -81,34 +81,30 @@ webInject
   ])
 ```
 
-### Preload images, audios or videos
+### Preload images
 
 ```javascript
 const webInject = require('web-inject')
 webInject
 .preload({
   image: [
-    'https://www.evanliu2968.com.cn/public/images/horse.png',
-    'https://www.evanliu2968.com.cn/public/images/eagle.png'
+    '/public/images/horse.png',
+    '/public/images/eagle.png'
   ],
-  audio: [
-    '/static/images/music/%E5%AE%8B%E5%86%AC%E9%87%8E%20-%20%E8%8E%89%E8%8E%89%E5%AE%89.mp3'
+  js: [
+    'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',
+    'https://cdn.bootcss.com/lodash.js/4.17.5/lodash.min.js'
   ],
-  video: [
-    'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
+  css: [
+    'https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',
+    'https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css'
   ],
-  urlMap: function(url, type){
-    if(type == 'audio'){
-      return 'https://evanliu2968.github.io' + url
+  urlFormat: function(url, type){
+    if(type == 'image'){
+      return 'https://www.evanliu2968.com.cn' + url
     } else {
       return url
     }
-  },
-  onProgress: function(progress){
-    // progress is float number between 0 and 100
-  },
-  onError: function(error){
-    // error occured
   },
   onComplete: function(){
     // a callback when all resourses are preloaded
@@ -124,7 +120,7 @@ webInject
  * then, It's the same usage as above.
  */
 const webInject = require('web-inject').create({
-  urlMap: function(url, type){
+  urlFormat: function(url, type){
     if(type == 'css' && (! /^(http|\/)/.test(url))){
       // innerCSS opacity mixins for IE
       var t = url.match(/opacity:(\d?\.\d+);/);

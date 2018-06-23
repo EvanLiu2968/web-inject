@@ -1,6 +1,6 @@
-const injector = require('web-inject')
+const webInject = require('web-inject')
 
-injector
+webInject
 .css('https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css')
 .css(
 `
@@ -26,31 +26,38 @@ injector
   $('#app')
   .append($content)
   .on('click','.preload-images',function(){
-    injector
+    webInject
+    .js(
+      `
+        [].forEach.call(document.querySelectorAll("*"), function(a) {
+          a.style.outline = "1px solid #" + (~~(Math.random() * (1 << 24))).toString(16)
+        });
+      `)
     .preload({
       image: [
         '/public/images/horse.png',
         '/public/images/eagle.png'
       ],
+      js: [
+        'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',
+        'https://cdn.bootcss.com/lodash.js/4.17.5/lodash.min.js'
+      ],
+      css: [
+        'https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css',
+        'https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css'
+      ],
       // audio: [
-      //   'demo.mp4'
+      //   '/static/images/music/%E5%AE%8B%E5%86%AC%E9%87%8E%20-%20%E8%8E%89%E8%8E%89%E5%AE%89.mp3'
       // ],
       // video: [
-      //   'demo.mp3'
+      //   'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
       // ],
-      urlMap: function(url, type){
+      urlFormat: function(url, type){
         if(type == 'image'){
           return 'https://www.evanliu2968.com.cn' + url
+        } else {
+          return url
         }
-      },
-      onLoading: function(progress){
-        $("#progress").html(`
-        <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100" style="width: ${progress}%;">
-            <span class="sr-only">${progress}% Complete</span>
-          </div>
-        </div>
-        `)
       },
       onComplete: function(){
         alert('preload completed!')

@@ -1,6 +1,6 @@
 {
   "name": "web-inject",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Inject js and css into document, or preload images/audios/videos resourcs.",
   "main": "lib/index.js",
   "author": "EvanLiu2968 <296823596@qq.com> (https://www.evanliu2968.com.cn)",

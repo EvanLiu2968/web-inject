@@ -8,17 +8,7 @@ class ImageLoader extends Loader {
   createRemoteImage(src, cb){
     var tag = document.createElement('img');
     tag.src = src;
-    if (tag.complete) {
-      cb(tag);
-    } else {
-      tag.onload = function() {
-        cb(tag);
-      };
-
-      tag.onerror = function(e) {
-        cb(tag);
-      };
-    }
+    this.subscribeMedia(tag, cb)
   }
 
   load(src, cb){
