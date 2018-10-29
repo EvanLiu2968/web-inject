@@ -1,4 +1,3 @@
-const md5 = require('blueimp-md5')
 const Loader = require('./BaseLoader')
 
 class CSSLoader extends Loader {
@@ -6,9 +5,7 @@ class CSSLoader extends Loader {
     super()
   }
 
-  createRemoteCSS(id, src, cb){
-    if(document.getElementById(id)) return;
-
+  createRemoteCSS(src, cb){
     const self = this
     var tag = document.createElement('link');
     tag.onload = tag.onreadystatechange = function(){
@@ -20,18 +17,14 @@ class CSSLoader extends Loader {
     if (src.lastIndexOf('.css')==-1) src += '.css';
     tag.setAttribute("rel", 'stylesheet');
     tag.setAttribute("href", src);
-    tag.setAttribute("id", id);
 
     this.appendToHead(tag)
   }
 
-  createInnerCSS(id, cssCode, cb){
-    if(document.getElementById(id)) return;
-
+  createInnerCSS(cssCode, cb){
     var tag = document.createElement('style'); // w3c
     tag.setAttribute("rel", "stylesheet");
     tag.setAttribute("type", "text/css");
-    tag.setAttribute("id", id);
 
     this.appendToHead(tag)
   
@@ -50,20 +43,11 @@ class CSSLoader extends Loader {
   }
 
   load(src, cb){
-    if (src) {
-      var $id = md5(src).slice(22)
-      var $el = document.getElementById($id)
-      if ($el) {
-        this.asyncCallback(cb)
-      } else {
-        if (src.indexOf('http')==0 || src.indexOf('/')==0) {
-          this.createRemoteCSS($id, src, cb)
-        } else {
-          this.createInnerCSS($id, src, cb)
-        }
-      }
+    if (!src) return;
+    if (src.indexOf('http')==0 || src.indexOf('/')==0) {
+      this.createRemoteCSS(src, cb)
     } else {
-      this.asyncCallback(cb)
+      this.createInnerCSS(src, cb)
     }
   }
 }

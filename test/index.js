@@ -17,6 +17,7 @@ webInject
     <div class="alert alert-success" role="alert">jQuery and Bootstrap is injected success!</div>
     <div style="margin-bottom:1em">
       <button class="btn btn-primary preload-images">Preload Images</button>
+      <button class="btn btn-primary preload-mui">Preload MUI</button>
     </div>
     <div id="progress"></div>
     <div id="preload"></div>
@@ -25,6 +26,29 @@ webInject
 )
   $('#app')
   .append($content)
+  .on('click','.preload-mui',function(){
+    webInject
+    .css([
+      'https://cdn.bootcss.com/mui/3.7.1/css/mui.min.css',
+      'https://www.evanliu2968.com.cn/public/libs/mui/picker/css/mui.picker.css',
+      'https://www.evanliu2968.com.cn/public/libs/mui/picker/css/mui.poppicker.css',
+      'https://www.evanliu2968.com.cn/public/libs/mui/picker/css/mui.dtpicker.css'
+    ])
+    .js([
+      'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',
+      'https://cdn.bootcss.com/mui/3.7.1/js/mui.min.js',
+      'https://www.evanliu2968.com.cn/public/libs/mui/picker/js/mui.picker.js',
+      'https://www.evanliu2968.com.cn/public/libs/mui/picker/js/mui.poppicker.js',
+      'https://www.evanliu2968.com.cn/public/libs/mui/picker/js/mui.dtpicker.js'
+    ], function(){
+      console.log(webInject.getFinishedTask())
+      console.log(mui)
+      var dtPicker = new mui.DtPicker({});
+      dtPicker.show(function(selectItems){
+        console.log(selectItems)
+      })
+    })
+  })
   .on('click','.preload-images',function(){
     webInject
     .js(

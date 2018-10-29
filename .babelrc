@@ -5,13 +5,7 @@
     ["env",  { "modules": false }]
   ],
   "plugins": [
-    [
-      "transform-runtime",
-      {
-        "polyfill": true,
-        "regenerator": true
-      }
-    ]
+    "transform-runtime"
   ],
   "comments": false
 }

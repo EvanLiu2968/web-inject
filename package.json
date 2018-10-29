@@ -1,8 +1,9 @@
 {
   "name": "web-inject",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Inject js and css into document, or preload images/audios/videos resourcs.",
   "main": "lib/index.js",
+  "module": "src/index.js",
   "author": "EvanLiu2968 <296823596@qq.com> (https://www.evanliu2968.com.cn)",
   "license": "MIT",
   "repository": {
@@ -29,9 +30,7 @@
     "reset-registry": "npm config set registry https://registry.npmjs.org",
     "reset-taobao": "npm config set registry https://registry.npm.taobao.org"
   },
-  "dependencies": {
-    "blueimp-md5": "^2.10.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
