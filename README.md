@@ -31,6 +31,32 @@ import webInject from 'web-inject'
 // or
 const webInject = require('web-inject')
 ```
+#### ⚠️ Heads up
+
+##### Importing the source version
+web-inject offers an untranspiled version for webpack by default. If you are using  `import` to require it in your project, you may encounter the problem that the default configuration will exclude node_modules from files to be transpiled by Babel. You need to modify the configuration as follows:
+```js
+const path = require('path')
+
+function resolve (dir) {
+  return path.join(__dirname, '..', dir)
+}
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: [
+          resolve('src'),
+          resolve('node_modules/web-inject')
+        ]
+      }
+    ]
+  }
+}
+```
 
 
 ### Inject js or css tag
