@@ -98,7 +98,7 @@ Injector.prototype.create = function() {
 Injector.prototype.js = function(src, cb) {
   if (this.finishedTask.find(function(item) {item.url == src})) {
     cb()
-    return
+    return this
   }
   var callback = function() {
     this.finishedTask.push({
@@ -110,23 +110,24 @@ Injector.prototype.js = function(src, cb) {
   }
   if (!isServer()) {
     callback()
-    return
+    return this
   }
   if (window.document.querySelector('[src="' + src + '"]')) {
     callback()
-    return
+    return this
   }
   if (src.indexOf('http') == 0 || src.indexOf('/') == 0) {
     createRemoteJS(src, callback)
   } else {
     createInnerJS(src, callback)
   }
+  return this
 }
 
 Injector.prototype.css = function(src, cb) {
   if (this.finishedTask.find(function(item) {item.url == src})) {
     cb()
-    return
+    return this
   }
   var callback = function() {
     this.finishedTask.push({
@@ -138,22 +139,24 @@ Injector.prototype.css = function(src, cb) {
   }
   if (!isServer()) {
     callback()
-    return
+    return this
   }
   if (window.document.querySelector('[href="' + src + '"]')) {
     callback()
-    return
+    return this
   }
   if (src.indexOf('http') == 0 || src.indexOf('/') == 0) {
     createRemoteCSS(src, callback)
   } else {
     createInnerCSS(src, callback)
   }
+  return this
 }
 
 Injector.prototype.image = function(src, cb) {
-  if (!isServer()) return
+  if (!isServer()) return this
   createRemoteImage(src, cb)
+  return this
 }
 // 用于ssr时插入script和link标签
 Injector.prototype.getTagMap = function(src, cb) {
