@@ -1,18 +1,18 @@
 # webInject
 
-[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/EvanLiu2968/web-inject)[![npm](https://img.shields.io/npm/v/web-inject.svg)](https://www.npmjs.com/package/web-inject)[![continuousphp](https://img.shields.io/continuousphp/git-hub/doctrine/dbal/master.svg)](https://www.npmjs.com/package/web-inject)[![Github file size](https://img.shields.io/github/size/Evanliu2968/web-inject/dist/webInject.min.js.svg)](https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/dist/webInject.min.js)
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/EvanLiu2968/web-inject) [![npm](https://img.shields.io/npm/v/web-inject.svg)](https://www.npmjs.com/package/web-inject) [![continuousphp](https://img.shields.io/continuousphp/git-hub/doctrine/dbal/master.svg)](https://www.npmjs.com/package/web-inject) [![Github file size](https://img.shields.io/github/size/Evanliu2968/web-inject/lib/web-inject.min.js.svg)](https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/dist/webInject.min.js)
 
 Inject js and css into document, or preload images.
 and you can call it with chaining.
 
 ## build
-- [rollup](https://www.rollupjs.com/guide/command-line-reference/#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6configuration-files)
+- [rollup](http://rollupjs.org/guide/en/)
 
 ## Usage
 
 in ES5, you can ...
 ```html
-<script type="text/javascript" src="https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/dist/webInject.min.js"></script>
+<script type="text/javascript" src="https://raw.githubusercontent.com/EvanLiu2968/web-inject/master/lib/web-inject.min.js"></script>
 <script>
   window.webInject
   .js('https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js', function(){
