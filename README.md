@@ -5,6 +5,9 @@
 Inject js and css into document, or preload images.
 and you can call it with chaining.
 
+## build
+- [rollup](https://www.rollupjs.com/guide/command-line-reference/#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6configuration-files)
+
 ## Usage
 
 in ES5, you can ...

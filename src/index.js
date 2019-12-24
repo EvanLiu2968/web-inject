@@ -1,168 +1,174 @@
-/*
- * https://github.com/EvanLiu2968/web-inject
- * inject css/js, for client and server, also support inject css/js array or code
+/**
+ * web-inject
  */
+'use strict'
 
-const isClient = typeof window != 'undefined'
+function isServer() {
+  return window === undefined
+}
 
-const finishedTask = {}
+function appendToHead(el) {
+  var head = document.head || document.getElementsByTagName('head')[0]
+  head.appendChild(el)
+}
 
-class Loader {
-  constructor(options){
-    this.options = Object.assign({
-      serial: false, // 是否串行加载
-      urlFormat: function(url, type){ return url },
-      onComplete: function(){},
-      maxConnection: 4
-    }, options)
-    this.Loader = {
-      'js': require('./JSLoader'),
-      'css': require('./CSSLoader'),
-      'image': require('./ImageLoader'),
-      'audio': require('./AudioLoader'),
-      'video': require('./VideoLoader'),
-    };
-    this.taskCount = 0;
-  }
-
-  getFinishedTask() {
-    return finishedTask
-  }
-
-  isFinishedTask(url) {
-    return !!finishedTask[url]
-  }
-
-  addFinishedTask(url) {
-    if(!this.isFinishedTask(url)){
-      finishedTask[url] = {
-        state: 'finished'
-      }
+function createRemoteCSS(src, cb) {
+  var tag = document.createElement('link')
+  tag.onload = tag.onreadystatechange = function() {
+    if (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') {
+      cb && cb()
     }
   }
 
-  startQueue(queue, options){
-    // 队列任务串行加载
-    if(options.serial) {
-      options.currentTask = options.currentTask || 0
-      if(options.currentTask < queue.length){
-        let task = queue[options.currentTask]
-        const callback = ()=>{
-          options.currentTask++;
-          if(task.callback) {
-            task.callback();
-            queue = []
-            return
-          }
-          this.startQueue(queue, options)
-        }
-        if(this.isFinishedTask(task.url)){
-          callback()
-        } else {
-          let loader = this.Loader[task.type]
-          loader.load(task.url, () => {
-            this.addFinishedTask(task.url)
-            callback()
-          })
-        }
-      }
-      return
-    }
-    // 队列任务并行加载
-    for(let i = 0; i < queue.length; i++){
-      if(this.taskCount < options.maxConnection){
-        if(!queue[i].state){
-          let task = queue[i]
-          const callback = ()=>{
-            this.taskCount--;
-            queue[i].state = 'finished'
-            if(task.callback) {
-              task.callback();
-              queue = []
-              return
-            }
-            this.startQueue(queue, options)
-          }
-          this.taskCount++;
-          queue[i].state = 'loading'
-          if(this.isFinishedTask(task.url)){
-            callback()
-          } else {
-            let loader = this.Loader[task.type]
-            loader.load(task.url, () => {
-              this.addFinishedTask(task.url)
-              callback()
-            })
-          }
-        }
-      }
+  if (src.lastIndexOf('.css') == -1) src += '.css'
+  tag.setAttribute('rel', 'stylesheet')
+  tag.setAttribute('href', src)
+  appendToHead(tag)
+}
+
+function createInnerCSS(cssCode, cb) {
+  var tag = document.createElement('style') // w3c
+  tag.setAttribute('rel', 'stylesheet')
+  tag.setAttribute('type', 'text/css')
+
+  this.appendToHead(tag)
+
+  var media = tag.getAttribute('media')
+  if (media != null && !/screen/.test(media.toLowerCase())) {
+    tag.setAttribute('media', 'screen')
+  }
+  if (tag.styleSheet) { // IE
+    tag.styleSheet.cssText += cssCode
+  } else if (document.getBoxObjectFor) {
+    tag.innerHTML += cssCode // FireFox broswer
+  } else {
+    tag.appendChild(document.createTextNode(cssCode))
+  }
+  this.asyncCallback(cb)
+}
+
+function createRemoteJS(src, cb) {
+  var tag = document.createElement('script')
+  tag.setAttribute('type', 'text/javascript')
+  tag.setAttribute('src', src)
+
+  tag.onload = tag.onreadystatechange = function() {
+    if (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') {
+      setTimeout(function() {
+        cb()
+      }, 100)
     }
   }
+  appendToHead(tag)
+}
+function createInnerJS(jsCode, cb) {
+  var tag = document.createElement('script')
+  tag.setAttribute('type', 'text/javascript')
 
-  create(options){
-    return new Loader(options)
-  }
+  tag.appendChild(document.createTextNode(jsCode))
 
-  preload(options){
-    if(!isClient) return;
+  this.appendToHead(tag)
 
-    options = Object.assign({}, this.options, options)
+  this.asyncCallback(cb)
+}
 
-    let loadType = ['js', 'css', 'image', 'audio', 'video'];
-    let queue = [];
-    loadType.forEach((item, i)=>{
-
-      if(!options[item]) return;
-
-      if(Array.isArray(options[item])){
-        options[item].map(u=>{
-          queue.push({
-            url: options.urlFormat(u, item),
-            type: item
-          })
-        })
-      }else{
-        queue.push({
-          url: options.urlFormat(options[item], item),
-          type: item
-        })
-      }
-    })
-    queue[queue.length-1].callback = options.onComplete;
-    this.startQueue(queue, options)
-    return this
-  }
-
-  load(type, src, cb){
-    let options = {
-      onComplete: cb
+function createRemoteImage(src, cb) {
+  var tag = document.createElement('img')
+  tag.src = src
+  if (tag.complete) {
+    cb()
+  } else {
+    tag.onload = function() {
+      cb()
     }
-    if(type === 'js') {
-      options.serial = true
+    tag.onerror = function(e) {
+      cb()
     }
-    options[type] = src;
-    return this.preload(options)
-  }
-
-  js(src, cb){
-    return this.load('js', src, cb)
-  }
-
-  css(src, cb){
-    return this.load('css', src, cb)
-  }
-
-  image(src, cb){
-    return this.load('image', src, cb)
-  }
-
-  audio(src, cb){
-    return this.load('audio', src, cb)
-  }
-
-  video(src, cb){
-    return this.load('video', src, cb)
   }
 }
 
-module.exports = new Loader()
+function Injector() {
+  this.finishedTask = []
+}
+
+Injector.prototype.create = function() {
+  return new Injector()
+}
+
+Injector.prototype.js = function(src, cb) {
+  if (this.finishedTask.find(function(item) {item.url == src})) {
+    cb()
+    return
+  }
+  var callback = function() {
+    this.finishedTask.push({
+      url: src,
+      type: 'js',
+      status: 'loaded'
+    })
+    cb()
+  }
+  if (!isServer()) {
+    callback()
+    return
+  }
+  if (window.document.querySelector('[src="' + src + '"]')) {
+    callback()
+    return
+  }
+  if (src.indexOf('http') == 0 || src.indexOf('/') == 0) {
+    createRemoteJS(src, callback)
+  } else {
+    createInnerJS(src, callback)
+  }
+}
+
+Injector.prototype.css = function(src, cb) {
+  if (this.finishedTask.find(function(item) {item.url == src})) {
+    cb()
+    return
+  }
+  var callback = function() {
+    this.finishedTask.push({
+      url: src,
+      type: 'css',
+      status: 'loaded'
+    })
+    cb()
+  }
+  if (!isServer()) {
+    callback()
+    return
+  }
+  if (window.document.querySelector('[href="' + src + '"]')) {
+    callback()
+    return
+  }
+  if (src.indexOf('http') == 0 || src.indexOf('/') == 0) {
+    createRemoteCSS(src, callback)
+  } else {
+    createInnerCSS(src, callback)
+  }
+}
+
+Injector.prototype.image = function(src, cb) {
+  if (!isServer()) return
+  createRemoteImage(src, cb)
+}
+// 用于ssr时插入script和link标签
+Injector.prototype.getTagMap = function(src, cb) {
+  var map = {
+    js: [],
+    css: []
+  }
+  this.finishedTask.forEach(function(item){
+    if (item.type === 'js') {
+      map['js'].push('<script type="text/javascript" src="'+item.url+'"></script>')
+    } else if (item.type === 'css') {
+      map['css'].push('<link rel="stylesheet" href="'+item.url+'"></link>')
+    }
+  })
+  return map
+}
+
+export default new Injector()
